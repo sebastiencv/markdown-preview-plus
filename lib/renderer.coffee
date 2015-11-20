@@ -128,18 +128,20 @@ resolveLinkPaths = (html, filePath) ->
         markdownIt ?= require './markdown-it-helper'
         href = markdownIt.decode(href)
 
-      continue unless href.match(/\.md$/)
-      continue if href.match(/^(https?|atom):\/\//)
       continue if href.startsWith(process.resourcesPath)
       continue if href.startsWith(resourcePath)
       continue if href.startsWith(packagePath)
-      if href[0] is '/'
-        unless fs.isFileSync(href)
-          try
-            href = path.join(rootDirectory, href.substring(1))
-          catch e
-      else
-        href = path.resolve(path.dirname(filePath), href)
+      console.log "href: ", href, href.match(/^https?:\/\//)
+      switch true
+        when href.match(/^https?:\/\//)?
+          true
+        when href[0] is '/'
+          unless fs.isFileSync(href)
+            try
+              href = path.join(rootDirectory, href.substring(1))
+            catch e
+        else
+          href = path.resolve(path.dirname(filePath), href)
       a.attr('data-path', href)
 
   o.html()

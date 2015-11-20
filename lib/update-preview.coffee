@@ -25,6 +25,8 @@
 WrappedDomTree  = require './wrapped-dom-tree'
 MathJaxHelper   = require './mathjax-helper'
 renderer        = require './renderer'
+{exec}          = require('child_process')
+Shell           = require('shell')
 
 module.exports = class UpdatePreview
   # @param dom A DOM element object
@@ -92,10 +94,12 @@ module.exports = class UpdatePreview
   updateLinks: ->
     for link in @tree.shownTree.dom.querySelectorAll('a')
       url = "#{encodeURI link.getAttribute "data-path"}"
-      link.setAttribute "href", ""
       do (url) ->
         link.onclick = ->
-          atom.workspace.open url, split: "left"
+          # let default process for url
+          unless url.match(/^https?:\/\//)?
+            # open with atom
+            atom.workspace.open url, split: "left"
     return
 
 
