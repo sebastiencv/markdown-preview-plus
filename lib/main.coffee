@@ -57,6 +57,14 @@ module.exports =
       type: 'boolean'
       default: false
       order: 50
+    suffixes:
+      type: 'array'
+      default: ['markdown', 'md', 'mdown', 'mkd', 'mkdow']
+      items:
+        type: 'string'
+    closePreviewWhenClosingEditor:
+      type: 'boolean'
+      default: false
     enablePandoc:
       type: 'boolean'
       default: false
@@ -164,6 +172,8 @@ module.exports =
       else
         createMarkdownPreviewView(filePath: pathname)
 
+    atom.workspace.onDidOpen(@subscribePane)
+
   toggle: ->
     if isMarkdownPreviewView(atom.workspace.getActivePaneItem())
       atom.workspace.destroyActivePaneItem()
@@ -232,3 +242,18 @@ module.exports =
           callback(proHTML)
       else
         callback(html)
+
+  subscribePane: (event) ->
+    suffix = event?.uri?.match(/(\w*)$/)[1]
+    if suffix in atom.config.get('markdown-preview-plus.suffixes')
+      previewUrl = "markdown-preview-plus://editor/#{event.item.id}"
+      previewPane = atom.workspace.paneForURI(previewUrl)
+      workspaceView = atom.views.getView(atom.workspace)
+      if not previewPane
+        atom.commands.dispatch workspaceView, 'markdown-preview-plus:toggle'
+        if atom.config.get('markdown-preview-plus.closePreviewWhenClosingEditor')
+          event.item.onDidDestroy ->
+            for pane in atom.workspace.getPanes()
+              for item in pane.items when item.getURI() is previewUrl
+                pane.destroyItem(item)
+                break

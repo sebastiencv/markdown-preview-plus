@@ -68,6 +68,7 @@ module.exports = class UpdatePreview
         renderer.convertCodeBlocksToAtomEditors elm
 
     @updateOrderedListsStart()
+    @updateLinks()
 
     return r
 
@@ -87,6 +88,18 @@ module.exports = class UpdatePreview
         previewOLs[i].removeAttribute 'start'
 
     return
+
+  updateLinks: ->
+    for link in @tree.shownTree.dom.querySelectorAll('a')
+      url = "#{encodeURI link.getAttribute "href"}"
+      link.setAttribute "href", ""
+      do (url) ->
+        console.log "add : ", url
+        link.onclick = ->
+          console.log "open : ", url
+          atom.workspace.open url, split: "left"
+    return
+
 
 prepareCodeBlocksForAtomEditors = (domFragment) ->
   for preElement in domFragment.querySelectorAll('pre')

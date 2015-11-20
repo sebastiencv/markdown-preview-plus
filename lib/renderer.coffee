@@ -40,6 +40,7 @@ render = (text, filePath, renderLaTeX, copyHTMLFlag, callback) ->
     return callback(error) if error?
     html = sanitize(html)
     html = resolveImagePaths(html, filePath, copyHTMLFlag)
+    html = resolveLinkPaths(html, filePath)
     callback(null, html.trim())
 
   if atom.config.get('markdown-preview-plus.enablePandoc')
@@ -113,6 +114,33 @@ resolveImagePaths = (html, filePath, copyHTMLFlag) ->
         src = "#{src}?v=#{v}" if v
 
       img.attr('src', src)
+
+  o.html()
+
+resolveLinkPaths = (html, filePath) ->
+  if atom.project?
+    [rootDirectory] = atom.project.relativizePath(filePath)
+  o = cheerio.load(html)
+  for imgElement in o('a')
+    a = o(imgElement)
+    if href = a.attr('href')
+      if not atom.config.get('markdown-preview-plus.enablePandoc')
+        markdownIt ?= require './markdown-it-helper'
+        href = markdownIt.decode(href)
+
+      continue unless href.match(/\.md$/)
+      continue if href.match(/^(https?|atom):\/\//)
+      continue if href.startsWith(process.resourcesPath)
+      continue if href.startsWith(resourcePath)
+      continue if href.startsWith(packagePath)
+      if href[0] is '/'
+        unless fs.isFileSync(href)
+          try
+            href = path.join(rootDirectory, href.substring(1))
+          catch e
+      else
+        href = path.resolve(path.dirname(filePath), href)
+      a.attr('href', href)
 
   o.html()
 
