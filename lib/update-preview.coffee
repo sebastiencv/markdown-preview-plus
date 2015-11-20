@@ -91,7 +91,7 @@ module.exports = class UpdatePreview
 
   updateLinks: ->
     for link in @tree.shownTree.dom.querySelectorAll('a')
-      url = "#{encodeURI link.getAttribute "href"}"
+      url = "#{encodeURI link.getAttribute "data-path"}"
       link.setAttribute "href", ""
       do (url) ->
         link.onclick = ->

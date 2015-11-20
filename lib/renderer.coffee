@@ -140,7 +140,7 @@ resolveLinkPaths = (html, filePath) ->
           catch e
       else
         href = path.resolve(path.dirname(filePath), href)
-      a.attr('href', href)
+      a.attr('data-path', href)
 
   o.html()
 
