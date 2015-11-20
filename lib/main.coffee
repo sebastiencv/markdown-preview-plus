@@ -66,6 +66,10 @@ module.exports =
       title: 'Close editor and preview when one is closed'
       type: 'boolean'
       default: true
+    onpenPreviewOnOpenMarkdown:
+      title: 'Opens the preview automatically when a markdown file is openedd'
+      type: 'boolean'
+      default: true
     enablePandoc:
       type: 'boolean'
       default: false
@@ -173,7 +177,8 @@ module.exports =
       else
         createMarkdownPreviewView(filePath: pathname)
 
-    atom.workspace.onDidOpen(@subscribePane)
+    if atom.config.get('markdown-preview-plus.onpenPreviewOnOpenMarkdown')
+      atom.workspace.onDidOpen(@subscribePane)
 
   toggle: ->
     if isMarkdownPreviewView(atom.workspace.getActivePaneItem())
