@@ -1,6 +1,6 @@
 # Markdown Preview Plus (MPP)
 
-Fork target : extend MPP to use atom as a markdown navigator : open a markdown file then click on its links to navigate to other articles.
+Fork target : extend MPP to use atom as a markdown^[footnote] navigator : open a markdown file then click on its links to navigate to other articles.
 
 ## Changes
 

@@ -96,10 +96,16 @@ module.exports = class UpdatePreview
       url = "#{encodeURI link.getAttribute "data-path"}"
       do (url) ->
         link.onclick = ->
-          # let default process for url
-          unless url.match(/^https?:\/\//)?
-            # open with atom
-            atom.workspace.open url, split: "left"
+          switch true
+            when url.match(/^#/)?
+              # let default process for url
+              true
+            when url.match(/^https?:\/\//)?
+              # let default process for url
+              true
+            else
+              # open with atom
+              atom.workspace.open url, split: "left"
     return
 
 

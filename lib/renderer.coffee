@@ -135,6 +135,8 @@ resolveLinkPaths = (html, filePath) ->
       switch true
         when href.match(/^https?:\/\//)?
           true
+        when href[0] is '#'
+          true
         when href[0] is '/'
           unless fs.isFileSync(href)
             try

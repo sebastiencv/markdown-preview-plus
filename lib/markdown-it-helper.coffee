@@ -39,6 +39,9 @@ init = (rL) ->
   markdownItOptions = getOptions()
 
   markdownIt = require('markdown-it')(markdownItOptions)
+  .use require 'markdown-it-footnote'
+  .use require 'markdown-it-sub'
+  .use require 'markdown-it-sup'
 
   if renderLaTeX
     math ?= require('markdown-it-math')
