@@ -48,6 +48,7 @@ class MarkdownPreviewView extends ScrollView
   destroy: ->
     imageWatcher ?= require './image-watch-helper'
     imageWatcher.removeFile(@getPath())
+    @destroy_callback() if @destroy_callback?
     @disposables.dispose()
 
   onDidChangeTitle: (callback) ->
@@ -59,6 +60,9 @@ class MarkdownPreviewView extends ScrollView
 
   onDidChangeMarkdown: (callback) ->
     @emitter.on 'did-change-markdown', callback
+
+  onDestroy: (callback) ->
+    @destroy_callback = callback
 
   subscribeToFilePath: (filePath) ->
     @file = new File(filePath)

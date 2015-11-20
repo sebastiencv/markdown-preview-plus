@@ -10,7 +10,7 @@
     "commonmark",
     "pandoc"
   ],
-  "repository": "https://github.com/Galadirith/markdown-preview-plus",
+  "repository": "https://github.com/sebastiencv/markdown-preview-plus",
   "license": "MIT",
   "engines": {
     "atom": "*"

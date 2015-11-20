@@ -1,5 +1,18 @@
 # Markdown Preview Plus (MPP)
 
+Fork target : extend MPP to use atom as a markdown navigator : open a markdown file then click on its links to navigate to other articles.
+
+## Changes
+
+* Merge with https://github.com/nick-f/markdown-preview-plus-opener
+  * This will always open the markdown preview in the right pane.
+  * Closing the editor will close the preview.
+* Add open file to links via `atom.workspace.open url, split: "left"`
+  * Since opener is active, this will open the markdown preview in the right pane.
+* Add close the editor when we close the preview too (option).
+
+## Original text
+
 [![appveyor][ab]][a] [![travis][tb]][t] [![wercker][wb]][w] ![apm version][av] ![apm downloads][ad]
 
 Markdown Preview Plus (MPP) is a fork of

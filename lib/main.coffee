@@ -62,9 +62,10 @@ module.exports =
       default: ['markdown', 'md', 'mdown', 'mkd', 'mkdow']
       items:
         type: 'string'
-    closePreviewWhenClosingEditor:
+    linkEditorAndPreview:
+      title: 'Close editor and preview when one is closed'
       type: 'boolean'
-      default: false
+      default: true
     enablePandoc:
       type: 'boolean'
       default: false
@@ -213,6 +214,13 @@ module.exports =
     atom.workspace.open(uri, options).done (markdownPreviewView) ->
       if isMarkdownPreviewView(markdownPreviewView)
         previousActivePane.activate()
+        # uri = @uriForEditor(editor)
+        # # link preview and editor
+        if atom.config.get('markdown-preview-plus.linkEditorAndPreview')
+          editor.onDidDestroy ->
+            atom.workspace.paneForItem(markdownPreviewView)?.destroyItem(markdownPreviewView)
+          markdownPreviewView.onDestroy ->
+            atom.workspace.paneForItem(editor)?.destroyItem(editor)
 
   previewFile: ({target}) ->
     filePath = target.dataset.path
@@ -251,9 +259,3 @@ module.exports =
       workspaceView = atom.views.getView(atom.workspace)
       if not previewPane
         atom.commands.dispatch workspaceView, 'markdown-preview-plus:toggle'
-        if atom.config.get('markdown-preview-plus.closePreviewWhenClosingEditor')
-          event.item.onDidDestroy ->
-            for pane in atom.workspace.getPanes()
-              for item in pane.items when item.getURI() is previewUrl
-                pane.destroyItem(item)
-                break

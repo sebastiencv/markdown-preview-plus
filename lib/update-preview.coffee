@@ -94,9 +94,7 @@ module.exports = class UpdatePreview
       url = "#{encodeURI link.getAttribute "href"}"
       link.setAttribute "href", ""
       do (url) ->
-        console.log "add : ", url
         link.onclick = ->
-          console.log "open : ", url
           atom.workspace.open url, split: "left"
     return
 
