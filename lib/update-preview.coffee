@@ -93,7 +93,7 @@ module.exports = class UpdatePreview
 
   updateLinks: ->
     for link in @tree.shownTree.dom.querySelectorAll('a')
-      url = "#{encodeURI link.getAttribute "data-path"}"
+      url = link.getAttribute "data-path"
       do (url) ->
         link.onclick = ->
           switch true
@@ -105,7 +105,7 @@ module.exports = class UpdatePreview
               true
             else
               # open with atom
-              atom.workspace.open url, split: "left"
+              atom.workspace.open decodeURIComponent(url), split: "left"
     return
 
 
