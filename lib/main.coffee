@@ -66,7 +66,7 @@ module.exports =
       title: 'Close editor and preview when one is closed'
       type: 'boolean'
       default: true
-    onpenPreviewOnOpenMarkdown:
+    openPreviewOnOpenMarkdown:
       title: 'Opens the preview automatically when a markdown file is openedd'
       type: 'boolean'
       default: true
@@ -177,8 +177,10 @@ module.exports =
       else
         createMarkdownPreviewView(filePath: pathname)
 
-    if atom.config.get('markdown-preview-plus.onpenPreviewOnOpenMarkdown')
+    if atom.config.get('markdown-preview-plus.openPreviewOnOpenMarkdown')
       atom.workspace.onDidOpen(@subscribePane)
+
+    atom.workspace.onDidDestroyPaneItem(@syncDestory)
 
   toggle: ->
     if isMarkdownPreviewView(atom.workspace.getActivePaneItem())
@@ -214,18 +216,9 @@ module.exports =
     previousActivePane = atom.workspace.getActivePane()
     options =
       searchAllPanes: true
-    if atom.config.get('markdown-preview-plus.openPreviewInSplitPane')
-      options.split = 'right'
     atom.workspace.open(uri, options).done (markdownPreviewView) ->
       if isMarkdownPreviewView(markdownPreviewView)
         previousActivePane.activate()
-        # uri = @uriForEditor(editor)
-        # # link preview and editor
-        if atom.config.get('markdown-preview-plus.linkEditorAndPreview')
-          editor.onDidDestroy ->
-            atom.workspace.paneForItem(markdownPreviewView)?.destroyItem(markdownPreviewView)
-          markdownPreviewView.onDestroy ->
-            atom.workspace.paneForItem(editor)?.destroyItem(editor)
 
   previewFile: ({target}) ->
     filePath = target.dataset.path
@@ -264,3 +257,20 @@ module.exports =
       workspaceView = atom.views.getView(atom.workspace)
       if not previewPane
         atom.commands.dispatch workspaceView, 'markdown-preview-plus:toggle'
+
+  syncDestory: (event) ->
+    # uri = @uriForEditor(editor)
+    # # link preview and editor
+    if atom.config.get('markdown-preview-plus.linkEditorAndPreview')
+      # determine the sister item
+      if match = event.item?.getURI()?.match(/^markdown-preview-plus:\/\/editor\/(.*)$/i)
+        # we are closing a preview, then close the editor
+        for pane in atom.workspace.getPanes()
+          for item in pane.items when item?.id is parseInt match[1]
+            atom.workspace.paneForItem(item)?.destroyItem(item) if item?
+      else
+        # we are closing the editor, close the associated preview
+        previewUrl = "markdown-preview-plus://editor/#{event.item?.id}"
+        for pane in atom.workspace.getPanes()
+          for item in pane.items when item?.getURI() is previewUrl
+            atom.workspace.paneForItem(item)?.destroyItem(item) if item?

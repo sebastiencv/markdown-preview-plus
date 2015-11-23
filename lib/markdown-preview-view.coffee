@@ -16,6 +16,9 @@ module.exports =
 class MarkdownPreviewView extends ScrollView
   @content: ->
     @div class: 'markdown-preview native-key-bindings', tabindex: -1, =>
+      @div class: "select_1_2_panes", =>
+        @button class: 'btn', click: 'navigateMode', "1"
+        @button class: 'btn', click: 'editMode', "2"
       # If you dont explicitly declare a class then the elements wont be created
       @div class: 'update-preview'
 
@@ -560,6 +563,29 @@ class MarkdownPreviewView extends ScrollView
     setTimeout ( -> element.removeClass('flash') ), 1000
 
     return element[0]
+
+  navigateMode: ->
+    # in navigate mode, close other panes than current
+    currentPane = atom.workspace.getActivePane()
+    for pane in atom.workspace.getPanes()
+      unless pane is currentPane
+        for item in pane.getItems()
+          pane.moveItemToPane item, currentPane
+        pane.close()
+
+  editMode: ->
+    # in edit mode, add preview on right
+    currentPane = atom.workspace.getActivePane()
+    # collect all present markdown preview
+    previewItems = []
+    for pane in atom.workspace.getPanes()
+      for item in pane.getItems() when item?.getURI()?.match(/^markdown-preview-plus:\/\/editor\/(.*)$/i)
+        previewItems.push item
+    # move preview items to the preview pane
+    if previewItems.length > 0
+      right_pane = currentPane.splitRight()
+      for item in previewItems
+        atom.workspace.paneForItem(item)?.moveItemToPane item, right_pane
 
 if Grim.includeDeprecatedAPIs
   MarkdownPreviewView::on = (eventName) ->
