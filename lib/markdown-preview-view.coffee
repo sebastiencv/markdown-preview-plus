@@ -16,9 +16,9 @@ module.exports =
 class MarkdownPreviewView extends ScrollView
   @content: ->
     @div class: 'markdown-preview native-key-bindings', tabindex: -1, =>
-      @div class: "select_1_2_panes", =>
-        @button class: 'btn', click: 'navigateMode', "1"
-        @button class: 'btn', click: 'editMode', "2"
+      @div class: "select-1-2-panes", =>
+        @button class: 'btn btn-1', click: 'navigateMode', ""
+        @button class: 'btn btn-2', click: 'editMode', ""
       # If you dont explicitly declare a class then the elements wont be created
       @div class: 'update-preview'
 
