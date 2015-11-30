@@ -18,7 +18,15 @@
 |**MS**<br>Mean squares |$MS_x = \frac{\sum_i{(x_i-\mu_x)^2}}{N}$ |
 |**SP**<br>sum of cross-products |$SP_{xy} = \sum_i{(x_i-\mu_x)(y_i-\mu_y)}$ |
 
+###
+* `hello`
 
+```sh
+Hello
+```
+
+* **bold**
+* *italic*
 
 ### Notions
 
@@ -188,4 +196,3 @@
 
 
 * $\hat{Y} = B_0 + \sum_k B_k X_k$
-

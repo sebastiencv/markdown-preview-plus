@@ -25,14 +25,18 @@
   padding: 20px;
 
   &, code {
-    color: #333;
-    background-color: rgba(0, 0, 0, 0.1);
+    background-color: rgb(40, 44, 52);
   }
 
   // Headings
   h1, h2, h3, h4, h5, h6 {
     -webkit-font-smoothing: antialiased;
     cursor: text;
+    color: #e06c75;
+  }
+
+  em {
+    color: #98c379;
   }
 
   & > h1:first-child,
@@ -126,7 +130,6 @@
 
   blockquote {
     p {
-      font-size: 16px;
       line-height: 1.5;
     }
   }
@@ -194,6 +197,10 @@
       }
   }
 
+  code, atom-text-editor {
+    background-color: #444;
+  }
+
   .select-1-2-panes {
     position: absolute;
     right: 20px;
@@ -202,8 +209,8 @@
     .btn {
       display: block;
       margin-bottom: 18px;
-      width: 32px;
-      height: 32px;
+      width: 34px;
+      height: 35px;
     }
 
     .btn-1 {
