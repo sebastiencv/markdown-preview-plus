@@ -131,7 +131,6 @@ resolveLinkPaths = (html, filePath) ->
       continue if href.startsWith(process.resourcesPath)
       continue if href.startsWith(resourcePath)
       continue if href.startsWith(packagePath)
-      console.log "href: ", href, href.match(/^https?:\/\//)
       switch true
         when href.match(/^https?:\/\//)?
           true
