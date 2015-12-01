@@ -39,6 +39,10 @@
     color: #98c379;
   }
 
+  strong {
+    color: #d19a66;
+  }
+
   & > h1:first-child,
   & > h1:first-child + h2,
   & > h2:first-child,
@@ -131,6 +135,7 @@
   blockquote {
     p {
       line-height: 1.5;
+      font-size: 14px;
     }
   }
 
@@ -198,7 +203,7 @@
   }
 
   code, atom-text-editor {
-    background-color: #444;
+    background-color: rgb(50, 54, 62);
   }
 
   .select-1-2-panes {
@@ -228,4 +233,48 @@
     }
 
   }
+
+  .md-preview-tabs {
+    position: relative;
+    clear: both;
+    margin: 25px 0;
+  }
+  .md-preview-tabs .tab {
+    float: left;
+  }
+  .md-preview-tabs .tab label {
+    cursor: pointer;
+    background: rgb(40, 44, 52);
+    padding: 10px;
+    border: 1px solid #ccc;
+    margin-left: -1px;
+    position: relative;
+    left: 1px;
+    display: inline;
+  }
+  .md-preview-tabs .tab [type=radio] {
+    display: none;
+  }
+  .md-preview-tabs .content {
+    position: absolute;
+    top: 28px;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    padding: 20px;
+    display: none;
+  }
+  .md-preview-tabs [type=radio]:checked ~ label {
+    background: rgb(50, 54, 62);
+    z-index: 2;
+    color: #ccc;
+  }
+  .md-preview-tabs [type=radio]:checked ~ label ~ .content {
+  }
+  .md-preview-tabs [type=radio]:checked ~ label ~ .content {
+    z-index: 1;
+    display: block;
+  }
+
+
 }
