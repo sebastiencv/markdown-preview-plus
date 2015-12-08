@@ -108,6 +108,9 @@ class MarkdownPreviewView extends ScrollView
       'core:save-as': (event) =>
         event.stopPropagation()
         @saveAs()
+      'core:copy': (event) =>
+        debugger
+        event.stopPropagation() if @copyToClipboard()
       'markdown-preview-plus:zoom-in': =>
         zoomLevel = parseFloat(@css('zoom')) or 1
         @css('zoom', zoomLevel + .1)
